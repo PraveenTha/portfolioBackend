@@ -5,25 +5,36 @@ const cloudinary = require("../config/cloudinary");
 const storage = new CloudinaryStorage({
   cloudinary,
   params: (req, file) => {
+
     let folder = "portfolio/misc";
     let resourceType = "image";
 
-   if (file.fieldname === "resumeFile") {
-  folder = "portfolio/resume";
-  resourceType = "image";  // ✅ CHANGE THIS
-}
+    /* ===== ABOUT IMAGE ===== */
+    if (file.fieldname === "image") {
+      folder = "portfolio/about";
+      resourceType = "image";
+    }
 
+    /* ===== RESUME FILE ===== */
+    if (file.fieldname === "resumeFile") {
+      folder = "portfolio/resume";
+      resourceType = "raw"; // pdf/doc etc
+    }
+
+    /* ===== PROJECT IMAGE ===== */
     if (file.fieldname === "projectImage") {
       folder = "portfolio/projects";
       resourceType = "image";
     }
 
+    /* ===== EXPERIENCE LOGO ===== */
     if (file.fieldname === "logo") {
       folder = "portfolio/experience";
       resourceType = "image";
     }
 
-    if (file.fieldname === "image") {
+    /* ===== BLOG IMAGE ===== */
+    if (file.fieldname === "blogImage") {
       folder = "portfolio/blogs";
       resourceType = "image";
     }
@@ -31,8 +42,8 @@ const storage = new CloudinaryStorage({
     return {
       folder,
       resource_type: resourceType,
-      type: "upload",          // 🔥 IMPORTANT
-      access_mode: "public",   // 🔥 VERY IMPORTANT
+      type: "upload",
+      access_mode: "public",
     };
   },
 });
@@ -40,7 +51,7 @@ const storage = new CloudinaryStorage({
 const upload = multer({
   storage,
   limits: {
-    fileSize: 50 * 1024 * 1024,
+    fileSize: 50 * 1024 * 1024, // 50MB
   },
 });
 
